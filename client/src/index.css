@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap');
+
+*{
+  font-family: "Coming Soon", cursive;
+  font-style: normal;
+  letter-spacing: 3px;
+}
+
+body {
+  background: #f1f1f1;
+}
+
+.form {
+  padding: 15px;
+  background: #0d47a1;
+  color: white;
+  border-radius: 5px;
+
+}
+
+.card-body {
+  background: #e1e2e1;
+  border-radius: 5px;
+  transition: all .2s ease-in-out;
+}
+
+.card-body:hover{
+cursor: pointer;
+opacity: .8;
+transform: translateY(-5px);
+}
+
+#creado {
+  background: #002b55;
+}
+
+.card {
+  background: transparent !important;
+  border: none !important;
+  
+}
+.custom-img{
+height: 35vh;
+object-fit: cover;
+object-position: top;
+}
+
+.fa-solid {
+  color: red;
+}
+
+i {
+  cursor: pointer;
+}
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
