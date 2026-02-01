@@ -1,65 +1,98 @@
-import axios from "axios";
+import { successToast, errorToast } from "./utils/toast";
 import { useEffect, useState } from "react";
-import Form from "./components/Form";
-import Post from "./components/Post";
 
-const urlBaseServer = "http://localhost:3000";
+import {
+  getPosts,
+  addPost,
+  deletePost,
+  likePost,
+} from "./services/postService";
 
-function App() {
-  const [titulo, setTitulo] = useState("");
-  const [imgSrc, setImgSRC] = useState("");
-  const [descripcion, setDescripcion] = useState("");
+import AddPost from "./components/AddPost";
+import CardPost from "./components/CardPost";
+
+export default function App() {
   const [posts, setPosts] = useState([]);
 
-  const getPosts = async () => {
-    const { data: posts } = await axios.get(urlBaseServer + "/posts");
-    setPosts([...posts]);
-  };
-
-  const agregarPost = async () => {
-    const post = { titulo, img: imgSrc, descripcion };
-    await axios.post(urlBaseServer + "/posts", post);
-    getPosts();
-  };
-
-  // este método se utilizará en el siguiente desafío
-  const like = async (id) => {
-    await axios.put(urlBaseServer + `/posts/like/${id}`);
-    getPosts();
-  };
-
-  // este método se utilizará en el siguiente desafío
-  const eliminarPost = async (id) => {
-    await axios.delete(urlBaseServer + `/posts/${id}`);
-    getPosts();
-  };
-
   useEffect(() => {
-    getPosts();
+    getPosts()
+      .then((data) => {
+        setPosts(data);
+      })
+      .catch((err) => {
+        errorToast("Error al obtener los posts");
+      });
   }, []);
 
+  const createPost = (post) => {
+    addPost(post)
+      .then((data) => {
+        setPosts([...posts, data]);
+        successToast("Post creado correctamente");
+      })
+      .catch((err) => {
+        errorToast("Error al crear el post");
+      });
+  };
+
+  const deletePostById = (id) => {
+    deletePost(id).then(() => {
+      const newPosts = posts.filter((post) => {
+        return post.id !== id;
+      });
+      setPosts(newPosts);
+      successToast("Post eliminado correctamente");
+    });
+  };
+
+  const likePostById = (id) => {
+    likePost(id).then(() => {
+      const newPosts = posts.map((post) => {
+        if (post.id === id) {
+          return {
+            ...post,
+            likes: post.likes + 1,
+          };
+        }
+        return post;
+      });
+      setPosts(newPosts);
+    });
+  };
+
   return (
-    <div className="App">
-      <h2 className="py-5 text-center fw-bolder">
-        &#128248; Like Me &#128248;
-      </h2>
-      <div className="row m-auto px-4">
-        <div className="col-12 col-md-5 col-xl-4">
-          <Form
-            setTitulo={setTitulo}
-            setImgSRC={setImgSRC}
-            setDescripcion={setDescripcion}
-            agregarPost={agregarPost}
-          />
-        </div>
-        <div className="col-12 col-md-7 col-cl-8 px-1 row posts align-items-start mx-auto">
-          {posts.map((post, i) => (
-            <Post key={i} post={post} like={like} eliminarPost={eliminarPost} />
-          ))}
-        </div>
-      </div>
+    <div className="container mt-5">
+      <h1 className="text-center">📷 Like Me 📷</h1>
+      <main className="row">
+        <section className="col-12 col-md-4 mt-5">
+          <div className="card bg-primary text-white">
+            <div className="card-body">
+              <h2>Add Post</h2>
+              <AddPost createPost={createPost} />
+            </div>
+          </div>
+        </section>
+        <section className="col-12 col-md-4 mt-5">
+          {posts.map((post) => {
+            return (
+              <CardPost
+                key={post.id}
+                post={post}
+                deletePostById={deletePostById}
+                likePostById={likePostById}
+              />
+            );
+          })}
+
+          {posts.length === 0 && (
+            <div className="card">
+              <div className="card-body">
+                <h2>No hay posts</h2>
+              </div>
+            </div>
+          )}
+        </section>
+      </main>
     </div>
   );
 }
-
-export default App;

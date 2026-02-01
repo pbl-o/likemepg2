@@ -8,7 +8,7 @@ Aplicación Fullstack diseñada para creación de posts.
 
 ## Instalación y uso.
 
-Instrucciones de instalación y configuración del proyecto:
+Instrucciones des instalación y configuración del proyecto:
 
 1. Clonar repositorio:
 
