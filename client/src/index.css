@@ -1,3 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap');
+
+*{
+  font-family: "Coming Soon", cursive;
+  font-style: normal;
+  letter-spacing: 3px;
+}
+
 .cursor-pointer {
   cursor: pointer;
+}
+
+.custom-img{
+height: 35vh;
+object-fit: cover;
+object-position: center;
 }

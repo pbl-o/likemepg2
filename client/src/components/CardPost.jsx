@@ -3,14 +3,14 @@ import HeartIcon from "./icons/heart-solid";
 
 export default function CardPost({ post, deletePostById, likePostById }) {
   return (
-    <article className="card mb-4">
+    <article className="card col-12 col-sm-6 col-md-4 col-lg-3 mb-1">
       <img
         src={post.img}
-        alt=""
-        className="card-img-top"
+        alt={post.descripcion}
+        className="custom-img card-img-top"
       />
       <div className="card-body">
-        <h5>{post.titulo}</h5>
+        <h5 className="fw-bolder">{post.titulo}</h5>
         <p>{post.descripcion}</p>
         <div className="d-flex mt-3 justify-content-between align-items-center">
           <div>

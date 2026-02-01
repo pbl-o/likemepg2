@@ -48,7 +48,7 @@ const create = async (req, res) => {
 const updateLikes = async (req, res) => {
   const { id } = req.params;
   try {
-    const post = await postModel.modificarLikes();
+    const post = await postModel.modificarLikes(id);
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
@@ -63,7 +63,7 @@ const remove = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const post = await postModel.eliminar();
+    const post = await postModel.eliminar(id);
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }

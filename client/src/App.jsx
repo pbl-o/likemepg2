@@ -27,7 +27,7 @@ export default function App() {
   const createPost = (post) => {
     addPost(post)
       .then((data) => {
-        setPosts([...posts, data]);
+        setPosts([data, ...posts]);
         successToast("Post creado correctamente");
       })
       .catch((err) => {
@@ -61,10 +61,10 @@ export default function App() {
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center">📷 Like Me 📷</h1>
+    <div className="container-fluid mt-5">
+      <h1 className="text-center fw-bolder">📷 Like Me 📷</h1>
       <main className="row">
-        <section className="col-12 col-md-4 mt-5">
+        <section className="col-12 col-md-4 col-lg-3 mt-5">
           <div className="card bg-primary text-white">
             <div className="card-body">
               <h2>Add Post</h2>
@@ -72,17 +72,19 @@ export default function App() {
             </div>
           </div>
         </section>
-        <section className="col-12 col-md-4 mt-5">
-          {posts.map((post) => {
-            return (
-              <CardPost
-                key={post.id}
-                post={post}
-                deletePostById={deletePostById}
-                likePostById={likePostById}
-              />
-            );
-          })}
+        <section className="col-12 col-md-8 col-lg-9 px-1  mt-5">
+          <div className="row g-1">
+            {posts.map((post) => {
+              return (
+                <CardPost
+                  key={post.id}
+                  post={post}
+                  deletePostById={deletePostById}
+                  likePostById={likePostById}
+                />
+              );
+            })}
+          </div>
 
           {posts.length === 0 && (
             <div className="card">

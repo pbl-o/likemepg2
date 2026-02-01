@@ -6,7 +6,7 @@ import { pool } from "../database/db.js";
 
 //Obtener todos los datos.
 const getAll = async () => {
-  const consulta = "SELECT * FROM posts";
+  const consulta = "SELECT * FROM posts order by id DESC";
   const result = await pool.query(consulta);
   if (result.rowCount === 0) {
     throw new Error("No Posts found");
@@ -50,6 +50,7 @@ const modificarLikes = async (id) => {
 };
 const eliminar = async (id) => {
   const consulta = "DELETE FROM posts WHERE id = $1 RETURNING *";
+  const values = [id]
   const result = await pool.query(consulta, values);
   if (result.rowCount === 0) {
     throw new Error("Post not found");

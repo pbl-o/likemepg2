@@ -55,12 +55,12 @@ npm run dev
 
 Para ingresar datos en el formulario e ingresarlos al apretar el botón agregar o al ingresarlos por medio de un api tester.
 
-datos a ingresar:
+datos a ingresar vía api tester:
 {
 - titulo: (texto)
 - img: (url de imagen)
 - descripcion: (texto)
-- likes: (numero) [opcional]
+- likes: (numero)
 }
 
 \* Puedes encontrar url de imágenes de dominio público en [Unsplash](https://unsplash.com/). Copia el link y pégalo en el formulario.
