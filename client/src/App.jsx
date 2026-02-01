@@ -27,7 +27,7 @@ export default function App() {
   const createPost = (post) => {
     addPost(post)
       .then((data) => {
-        setPosts([data, ...posts]);
+        setPosts([...posts, data]);
         successToast("Post creado correctamente");
       })
       .catch((err) => {

@@ -28,12 +28,13 @@ const getById = async (id) => {
 //Crear nuevo registro
 const agregar = async (titulo, img, descripcion, likes = 0) => {
   const consulta =
-    "INSERT INTO posts (id, titulo, descripcion, likes) values (DEFAULT, $1, $2, $3, $4) RETURNING *";
-  const values = [titulo, img, descripcion, (likes = 0)];
+    "INSERT INTO posts (id, titulo, img, descripcion, likes) values (DEFAULT, $1, $2, $3, $4) RETURNING *";
+  const values = [titulo, img, descripcion, likes = 0];
   const result = await pool.query(consulta, values);
   console.log("Post Agregado");
   return result.rows[0];
 };
+
 //Modificar post (agregar like) -> *Método tipo PUT ya implementado en en front.
 const modificarLikes = async (id) => {
   const consulta =

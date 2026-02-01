@@ -9,7 +9,7 @@ const read = async (req, res) => {
     }
     return res.status(200).json(posts);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 //Leer post específico
@@ -21,7 +21,7 @@ const readById = async (req, res) => {
     }
     return res.status(201).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -40,7 +40,7 @@ const create = async (req, res) => {
     }
     return res.status(201).json(newPost);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -54,7 +54,7 @@ const updateLikes = async (req, res) => {
     }
     return res.status(200).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -69,7 +69,7 @@ const remove = async (req, res) => {
     }
     return res.status(200).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -86,7 +86,7 @@ const updateSingle = async (req, res) => {
     }
     return res.status(200).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -101,7 +101,7 @@ const updateMulti = async (req, res) => {
     }
     return res.status(200).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 //Modifica uno varios campos via via req.body
@@ -122,7 +122,7 @@ const updateAll = async (req, res) => {
     }
     return res.status(200).json(posts);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
