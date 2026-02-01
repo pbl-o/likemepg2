@@ -11,7 +11,7 @@ export const pool = new Pool({
   allowExitOnIdle: true,
 });
 
-const getDate = async () => {
+export const getDate = async () => {
   try {
     const res = await pool.query("SELECT NOW()");
     console.log(
