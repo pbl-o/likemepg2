@@ -132,3 +132,5 @@ const postController = {
     updateAll,
     remove
 }
+
+export default postController
