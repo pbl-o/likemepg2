@@ -83,12 +83,11 @@ const modificarSingle = async (campo, valor, id) => {
   return result.rows[0];
 };
 
-
 //Para modificar uno o varios campos por ejecución.
 
 // Método ascociado a ruta: PUT/posts/multi/:id   (vía req.query)
 const modificarMulti = async (campos, id) => {
-    // array de columnas válidas
+  // array de columnas válidas
   const camposEsperados = ["titulo", "img", "descripcion", "likes"];
 
   const keys = Object.keys(campos).filter((key) =>
@@ -96,7 +95,7 @@ const modificarMulti = async (campos, id) => {
   );
 
   if (keys.length === 0) {
-      throw new Error("No valid column name");
+    throw new Error("No valid column name");
   }
 
   if (keys.length > camposEsperados.length) {
