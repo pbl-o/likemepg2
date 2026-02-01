@@ -4,16 +4,17 @@ import { pool } from "../database/db.js";
 
 //metodos de consulta en SQL
 
-//obtener todos los datos.
-
+//Obtener todos los datos.
 const getAll = async () => {
-  const consulta = "SELECT * FROM posts RETURNING *";
-  const result = await pool.query(consulta, values);
+  const consulta = "SELECT * FROM posts";
+  const result = await pool.query(consulta);
   if (result.rowCount === 0) {
     throw new Error("No Posts found");
   }
   return result.rows;
 };
+
+//Obtener datos específico vía ID.
 const getById = async (id) => {
   const consulta = "SELECT * FROM posts WHERE id = $1 RETURNING *";
   const values = [id];
@@ -23,6 +24,8 @@ const getById = async (id) => {
   }
   return result.rows[0];
 };
+
+//Crear nuevo registro
 const agregar = async (titulo, img, descripcion, likes = 0) => {
   const consulta =
     "INSERT INTO posts (id, titulo, descripcion, likes) values (DEFAULT, $1, $2, $3, $4) RETURNING *";
@@ -31,7 +34,7 @@ const agregar = async (titulo, img, descripcion, likes = 0) => {
   console.log("Post Agregado");
   return result.rows[0];
 };
-// Método para put ya implementado en en front.
+//Modificar post (agregar like) -> *Método tipo PUT ya implementado en en front.
 const modificarLikes = async (id) => {
   const consulta =
     "UPDATE posts SET likes = likes + 1  where id = $1 RETURNING *";
@@ -55,17 +58,20 @@ const eliminar = async (id) => {
 };
 
 //Métodos implementados por backend (a incorporar al front)
+//Métodos con base en investigación personal para modificar uno o varios registros.
 
-//Métodos con base en investigación personal.
+//Para modificar un campo por ejecución.
 
 // Método ascociado a ruta: PUT/posts/single/:id
 const modificarSingle = async (campo, valor, id) => {
-  const camposValidos = ["titulo", "img", "descripcion", "likes"];
-
-  if (camposValidos.indexOf(campo) === -1) {
-    throw new Error("Insert a valid field");
+  //Se crea un array con los nombres de las columnas , para proteger contra inyección de SQL para el campo dinámico
+  const camposEsperados = ["titulo", "img", "descripcion", "likes"];
+  //Se captura error en caso de que el campo ingresado no corresponda a los campos válidos
+  if (camposEsperados.indexOf(campo) === -1) {
+    throw new Error("No valid column name");
   }
 
+  //Se modela la consulta SQL como visto en clases.
   const consulta = `UPDATE posts SET ${campo} = $1 WHERE id = $2 RETURNING *`;
   const values = [valor, id];
   const result = await pool.query(consulta, values);
@@ -76,7 +82,13 @@ const modificarSingle = async (campo, valor, id) => {
   console.log("Post modificado");
   return result.rows[0];
 };
+
+
+//Para modificar uno o varios campos por ejecución.
+
+// Método ascociado a ruta: PUT/posts/multi/:id   (vía req.query)
 const modificarMulti = async (campos, id) => {
+    // array de columnas válidas
   const camposEsperados = ["titulo", "img", "descripcion", "likes"];
 
   const keys = Object.keys(campos).filter((key) =>
@@ -84,20 +96,26 @@ const modificarMulti = async (campos, id) => {
   );
 
   if (keys.length === 0) {
-    throw new Error("No valid fields");
+      throw new Error("No valid column name");
   }
 
   if (keys.length > camposEsperados.length) {
     throw new Error("Amount of fields exceeded");
   }
 
+  // modelando campos
+  //Columna
   const camposValidos = keys
-    .map((key, index) => `${key} =$${index + 1}`)
+    .map((key, index) => `${key} = $${index + 1}`)
     .join(", ");
+  //Valor
   const values = keys.map((key) =>
     key === "likes" ? Number(campos[key]) : campos[key],
   );
+  //Se agrega ID
   values.push(id);
+
+  //Se modela la consulta
   const consulta = `UPDATE posts SET ${camposValidos} WHERE id = $${values.length} RETURNING *`;
   const result = await pool.query(consulta, values);
 
@@ -107,10 +125,12 @@ const modificarMulti = async (campos, id) => {
 
   return result.rows[0];
 };
+
+// Método ascociado a ruta: PUT/posts/todos/:id (vía req.body)
 //Método con base en lo que fue visto en clases.
 const modificarVarios = async (titulo, img, descripcion, likes, id) => {
   const consulta =
-    "UPDATE posts SET (titulo =  COALESCE($1, titulo), img = COALESCE($2, img), descripcion = CAOLESCE($3, descripcion), likes = COALESCE($4, likes)) WHERE id = $5";
+    "UPDATE posts SET (titulo =  COALESCE($1, titulo), img = COALESCE($2, img), descripcion = CAOLESCE($3, descripcion), likes = COALESCE($4, likes)) WHERE id = $5 RETURNING *";
   const values = [titulo, img, descripcion, likes, id];
   const result = await pool.query(consulta, values);
 
