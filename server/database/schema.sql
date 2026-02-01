@@ -1,3 +1,4 @@
+-- Active: 1769730037726@@127.0.0.1@5432@likeme
 CREATE DATABASE likeme;
 
 -- Acceso a la base de datos en la terminal psql:
