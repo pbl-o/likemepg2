@@ -57,14 +57,15 @@ Para ingresar datos en el formulario e ingresarlos al apretar el botón agregar 
 
 datos a ingresar:
 {
-- nombre: (texto)
+- titulo: (texto)
 - img: (url de imagen)
 - descripcion: (texto)
+- likes: (numero) [opcional]
 }
 
 \* Puedes encontrar url de imágenes de dominio público en [Unsplash](https://unsplash.com/). Copia el link y pégalo en el formulario.
 
-\*Esta aplicación solo contempla los métodos GET y POST de momento. Las funcionalidades para añadir likes y borrar botones se añadirán a la brevedad.
+\*Esta aplicación tiene algunos métodos que solo están implementados en el backend. La interfaz será modificada para conseguir incorporarlos a la brevedad.
 
 Una vez levantado el servidor, para visualizar la información del serivdor en el browser, ingresar a:
 
