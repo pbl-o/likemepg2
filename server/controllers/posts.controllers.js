@@ -9,7 +9,7 @@ const read = async (req, res) => {
     }
     return res.status(200).json(posts);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message: error.message });
   }
 };
 //Leer post específico
@@ -21,7 +21,7 @@ const readById = async (req, res) => {
     }
     return res.status(201).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -40,11 +40,11 @@ const create = async (req, res) => {
     }
     return res.status(201).json(newPost);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message: error.message });
   }
 };
 
-//Modificar Post (agregar un like), ya implementado en front
+//Modificar Post (agregar un like), ya implementado en front.
 const updateLikes = async (req, res) => {
   const { id } = req.params;
   try {
@@ -54,7 +54,7 @@ const updateLikes = async (req, res) => {
     }
     return res.status(200).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -69,7 +69,7 @@ const remove = async (req, res) => {
     }
     return res.status(200).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -77,8 +77,18 @@ const remove = async (req, res) => {
 //Modifica un solo campo de forma dinámica via req.query (único)
 const updateSingle = async (req, res) => {
   const { id } = req.params;
-  const campo = Object.keys(req.query)[0];
-  const valor = req.query[campo];
+  // Se crea un array con las llaves adicionadas al query.
+  const campoKeys = Object.keys(req.query);
+
+  //se limita el número de llaves a utilizar a uno y solo uno.
+  if(campoKeys.length !== 1){
+    return res.status(400).json({message: "Only one parameter allowed"})
+  }
+
+  //Se configura el campo seleccionado y su valor respectivo con:
+  const campo = campoKeys[0]  // El primer índice del array de queries
+  const valor = req.query[campo];  // el valor correspondiente a ese índice.
+
   try {
     const post = await postModel.modificarSingle(campo, valor, id);
     if (!post) {
@@ -86,7 +96,7 @@ const updateSingle = async (req, res) => {
     }
     return res.status(200).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -101,7 +111,7 @@ const updateMulti = async (req, res) => {
     }
     return res.status(200).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message:  error.message });
   }
 };
 //Modifica uno varios campos via via req.body
@@ -120,9 +130,9 @@ const updateAll = async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
-    return res.status(200).json(posts);
+    return res.status(200).json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message:  error.message });
   }
 };
 

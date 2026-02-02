@@ -29,7 +29,7 @@ const getById = async (id) => {
 const agregar = async (titulo, img, descripcion, likes = 0) => {
   const consulta =
     "INSERT INTO posts (id, titulo, img, descripcion, likes) values (DEFAULT, $1, $2, $3, $4) RETURNING *";
-  const values = [titulo, img, descripcion, likes = 0];
+  const values = [titulo, img, descripcion, (likes = 0)];
   const result = await pool.query(consulta, values);
   console.log("Post Agregado");
   return result.rows[0];
@@ -50,7 +50,7 @@ const modificarLikes = async (id) => {
 };
 const eliminar = async (id) => {
   const consulta = "DELETE FROM posts WHERE id = $1 RETURNING *";
-  const values = [id]
+  const values = [id];
   const result = await pool.query(consulta, values);
   if (result.rowCount === 0) {
     throw new Error("Post not found");
@@ -69,10 +69,10 @@ const modificarSingle = async (campo, valor, id) => {
   //Se crea un array con los nombres de las columnas , para proteger contra inyección de SQL para el campo dinámico
   const camposEsperados = ["titulo", "img", "descripcion", "likes"];
   //Se captura error en caso de que el campo ingresado no corresponda a los campos válidos
-  if (camposEsperados.indexOf(campo) === -1) {
+  if (!camposEsperados.includes(campo)) {
     throw new Error("No valid column name");
   }
-
+  
   //Se modela la consulta SQL como visto en clases.
   const consulta = `UPDATE posts SET ${campo} = $1 WHERE id = $2 RETURNING *`;
   const values = [valor, id];
@@ -93,15 +93,19 @@ const modificarMulti = async (campos, id) => {
   const camposEsperados = ["titulo", "img", "descripcion", "likes"];
 
   const keys = Object.keys(campos).filter((key) =>
-    camposEsperados.includes(key),
+    camposEsperados.includes(key)
   );
 
-  if (keys.length === 0) {
-    throw new Error("No valid column name");
+  const rejectedKeys = Object.keys(campos).filter(
+    (key) => !camposEsperados.includes(key)
+  );
+
+  if (rejectedKeys.length > 0) {
+    throw new Error("No valid column name inserted");
   }
 
-  if (keys.length > camposEsperados.length) {
-    throw new Error("Amount of fields exceeded");
+  if (keys.length === 0) {
+    throw new Error("No valid column name or no column name inserted");
   }
 
   // modelando campos
@@ -131,7 +135,7 @@ const modificarMulti = async (campos, id) => {
 //Método con base en lo que fue visto en clases.
 const modificarVarios = async (titulo, img, descripcion, likes, id) => {
   const consulta =
-    "UPDATE posts SET (titulo =  COALESCE($1, titulo), img = COALESCE($2, img), descripcion = CAOLESCE($3, descripcion), likes = COALESCE($4, likes)) WHERE id = $5 RETURNING *";
+    "UPDATE posts SET titulo =  COALESCE($1, titulo), img = COALESCE($2, img), descripcion = COALESCE($3, descripcion), likes = COALESCE($4, likes) WHERE id = $5 RETURNING *";
   const values = [titulo, img, descripcion, likes, id];
   const result = await pool.query(consulta, values);
 
