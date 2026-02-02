@@ -55,6 +55,11 @@ npm run dev
 
 Para ingresar datos en el formulario e ingresarlos al apretar el botón agregar o al ingresarlos por medio de un api tester.
 
+dependiendo de la ruta, se pueden alterar uno más datos:
+/posts/single/:id  (solo un campo por ejecución)
+/posts/multi/:id (varios vía query -> (req.query))
+/posts/todos/:id (varios vía body -> (req.body))
+
 datos a ingresar vía api tester:
 {
 - titulo: (texto)
