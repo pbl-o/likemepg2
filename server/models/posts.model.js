@@ -134,6 +134,7 @@ const modificarMulti = async (campos, id) => {
 // Método ascociado a ruta: PUT/posts/todos/:id (vía req.body)
 //Método con base en lo que fue visto en clases.
 const modificarVarios = async (titulo, img, descripcion, likes, id) => {
+  //Usé COALESCE() para mantener el valor anterior del campo, en caso de que el valor agregado fuese nulo o undefined.
   const consulta =
     "UPDATE posts SET titulo =  COALESCE($1, titulo), img = COALESCE($2, img), descripcion = COALESCE($3, descripcion), likes = COALESCE($4, likes) WHERE id = $5 RETURNING *";
   const values = [titulo, img, descripcion, likes, id];
